@@ -1,4 +1,4 @@
-/*************************************************************************
+﻿/*************************************************************************
 *                                                                        *
 *  (C) Copyright 2004. Media Research Centre at the                      *
 *  Sociology and Communications Department of the                        *
@@ -9,7 +9,7 @@
 *************************************************************************/
 
 #pragma warning ( disable : 4786 )
-
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
 
 #include <string>
 
@@ -138,6 +138,9 @@ int main(int argC, char* argV[])
 
   // compilerOptimizationTest(); return 0;
   // rectangleCacheTest(); return 0;
+
+  // -utf d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\en-pt.dic "d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\0001_CHAPTER I..txt" d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\0001_I.txt
+  // -utf d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\chinese\en-zh.dic "d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\chinese\0003_Chapter 3.txt" "d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\chinese\0003_chinese.txt"
 
   return ( Hunglish::main_alignerTool(argC,argV) );
 

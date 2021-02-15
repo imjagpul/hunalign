@@ -13,6 +13,8 @@
 // Hajjaj. Ez komoly warning. De nemigen tudom kikerulni.
 #pragma warning ( disable : 4503 )
 
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
+
 #include "cooccurrence.h"
 
 #include "networkFlow.h"

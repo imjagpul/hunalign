@@ -9,6 +9,7 @@
 *************************************************************************/
 
 #pragma warning ( disable : 4786 )
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
 
 #include "networkFlow.h"
 
