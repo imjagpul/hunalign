@@ -178,7 +178,7 @@ void trivialTranslate(
                            Sentence& translatedSentence
                      )
 {
-  bool logging = false;
+  bool logging = true;
 
   std::ofstream* translateLogsPtr;
   if (logging)
@@ -336,6 +336,7 @@ void buildDumbMultiDictionary( const DictionaryItems& dictionary, DumbMultiDicti
 
 
 // Normalizaljuk a Sentence-eket, hogy abecerendben legyenek az egyes szavak.
+// We normalize the sentences so that each word is in alphabetical order.
 void sortNormalizeSentences( Hunglish::SentenceList& sentenceList )
 {
   {
@@ -354,20 +355,24 @@ void normalizeTextsForIdentity( const DictionaryItems& dictionary,
                                 const SentenceList& huSentenceListPretty,  const SentenceList& enSentenceListPretty,
                                       SentenceList& huSentenceListGarbled,       SentenceList& enSentenceListGarbled )
 {
+  //create a modified dictionary ("dumb" / "sumplified") - using word frequencies
+  //i.e. only keep one translation per each word (there could be several in the original dictionary)
+  // only keep the "best" (i.e. shorter phrase / more frequent word)
   DumbDictionary dumbDictionary;
-
   FrequencyMap enFreq;
-  enFreq.build(enSentenceListPretty);
+  enFreq.build(enSentenceListPretty); //calculate word frequencies (how often does a particular word occur in text)
   buildDumbDictionaryUsingFrequencies( dictionary, enFreq, dumbDictionary );
 
   std::cerr << "Simplified dictionary ready." << std::endl;
 
-  SentenceList huSentenceList;
-
+  SentenceList huSentenceList; //UNUSED CODE?
+  //translate one language into the other one using this dumb dictionary
+  //NOTE: actually, it the results quite sucks here
   trivialTranslateSentenceList( dumbDictionary, huSentenceListPretty, huSentenceListGarbled );
 
   std::cerr << "Rough translation ready." << std::endl;
 
+  //sort the words in each sentence (into alphabetical order) - so that they can be matched easier?
   sortNormalizeSentences(huSentenceListGarbled);
 
   enSentenceListGarbled = enSentenceListPretty;

@@ -60,10 +60,12 @@ bool isNumber( const std::string& s )
   return true;
 }
 
-// (!!!) We assert that sx and sy are ordered sets of Word-s!
+// (!!!) We assume that sx and sy are ordered sets of Word-s!
+// sx - list of words in language one
+// sy - list of words in language two
 int specializedIntersectionSize( const WordList& sx, const WordList& sy )
 {
-  int inter=0;
+  int inter=0; //how many words match exactly (+bonus)
   WordList::const_iterator sxt = sx.begin();
   WordList::const_iterator syt = sy.begin();
   WordList::const_iterator sxe = sx.end();
@@ -72,6 +74,7 @@ int specializedIntersectionSize( const WordList& sx, const WordList& sy )
   int numberOfDifferingNumbers = 0;
   int numberOfSameNumbers = 0;
 
+  //iterate through both word lists, get count of how many match
   for ( ; sxt!=sxe && syt!=sye ; )
   {
     if ( *sxt < *syt )
@@ -103,6 +106,7 @@ int specializedIntersectionSize( const WordList& sx, const WordList& sy )
   }
 
   // TODO miert pont.
+  // add a bonus if most of the numerals in both sentences are equivalent
   if ( (numberOfSameNumbers>0) && ( numberOfDifferingNumbers <= numberOfSameNumbers/5 ) )
   {
     inter += 10;
@@ -152,11 +156,11 @@ bool exceptionalScoring( const Phrase& hu, const Phrase& en, double& score )
 const double maximumScore = 3.0;
 
 double scoreByIdentity( const Phrase& hu, const Phrase& en )
-{
+{ //Scores how similiar two word lists are.
   double score = 0;
   if ( ! exceptionalScoring( hu, en, score ) )
   {
-    score = specializedIntersectionSize( hu, en );
+    score = specializedIntersectionSize( hu, en ); //how many words match (+a bonus for numerals)
 
     // If we divide with max here, we are better at avoiding global mistakes.
     // If we divide with min here, we are better at avoiding local mistakes.
@@ -167,8 +171,8 @@ double scoreByIdentity( const Phrase& hu, const Phrase& en )
     // Emlékszel? Remember the day that they threw you out?
     // 
     // Hopefully Gale-Church scoring compensates for this. Sometimes does not compensate enough.
-    score /= ( (hu.size()<en.size() ? hu.size() : en.size() ) + 1 ) ;
-    score *= maximumScore ;
+    score /= ( (hu.size()<en.size() ? hu.size() : en.size() ) + 1 ) ; //divide by word count + 1
+    score *= maximumScore ;                                           //multiply by a constant
   }
 
   return score;

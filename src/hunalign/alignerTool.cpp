@@ -243,10 +243,12 @@ double alignerToolWithObjects( const DictionaryItems& dictionary,
   int huBookSize = huSentenceListPretty.size();
   int enBookSize = enSentenceList.size();
 
+  //STEP 1 : calculate sentence lengths (simply total chars in sentence?)
   SentenceValues huLength,enLength;
   setSentenceValues( huSentenceListPretty, huLength, alignParameters.utfCharCountingMode ); // Here we use the most originalest Hungarian text.
   setSentenceValues( enSentenceList,       enLength, alignParameters.utfCharCountingMode );
 
+  //[STEP X : stop words (only if required)]
   bool quasiglobal_stopwordRemoval = false;
   std::cerr << "quasiglobal_stopwordRemoval is set to " << quasiglobal_stopwordRemoval << std::endl;
   if (quasiglobal_stopwordRemoval)
@@ -255,12 +257,16 @@ double alignerToolWithObjects( const DictionaryItems& dictionary,
     std::cerr << "Stopwords removed." << std::endl;
   }
 
+  //STEP 2 : translate sentences from "HU" into "EN" language using a naive dictionary, sort each sentence alphabetically
   SentenceList huSentenceListGarbled, enSentenceListGarbled;
 
   normalizeTextsForIdentity( dictionary,
                              huSentenceListPretty,  enSentenceList,
                              huSentenceListGarbled, enSentenceListGarbled );
 
+  //STEP 3 : similiarity matrix - score how many words match in each sentence 
+  //(each sentence is compared with each sentence)
+  //so the matrix size is (sentence count in language one X sentence count in language two)
   const int minimalThickness = 500;
 
   const double quasiglobal_maximalSizeInMegabytes = 4000;
@@ -289,12 +295,12 @@ double alignerToolWithObjects( const DictionaryItems& dictionary,
     thickness = maximalThickness;
   }
 
-  AlignMatrix similarityMatrix( huBookSize, enBookSize, thickness, outsideOfRadiusValue );
+  AlignMatrix similarityMatrix( huBookSize, enBookSize, thickness, outsideOfRadiusValue ); // AlignMatrix is a modified kind of Vector
 
   sentenceListsToAlignMatrixIdentity( huSentenceListGarbled, enSentenceListGarbled, similarityMatrix );
   std::cerr << std::endl;
 
-  // temporaryDumpOfAlignMatrix( std::cerr, similarityMatrix );
+  //temporaryDumpOfAlignMatrix( std::cerr, similarityMatrix );
 
   std::cerr << "Rough translation-based similarity matrix ready." << std::endl;
 
@@ -303,6 +309,9 @@ double alignerToolWithObjects( const DictionaryItems& dictionary,
 //x   std::cout << std::endl;
 //x   exit(-1);
 
+  //STEP 4 :  generate a matrix ("dynamic programming" ?) and find the best trail, i.e. the best alignment
+  //(because knowing which line matches other best is not useful, when we do not consider the context)
+  //also, at the same time apply bonuses for how close the sentence lengths are
   Trail bestTrail;
   AlignMatrix dynMatrix( huBookSize+1, enBookSize+1, thickness, 1e30 );
 

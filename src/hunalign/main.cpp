@@ -139,9 +139,6 @@ int main(int argC, char* argV[])
   // compilerOptimizationTest(); return 0;
   // rectangleCacheTest(); return 0;
 
-  // -utf d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\en-pt.dic "d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\0001_CHAPTER I..txt" d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\0001_I.txt
-  // -utf d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\chinese\en-zh.dic "d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\chinese\0003_Chapter 3.txt" "d:\projects\q2_Linguophil\lookingAtHunAlign\testRuns\chinese\0003_chinese.txt"
-
   return ( Hunglish::main_alignerTool(argC,argV) );
 
   Hunglish::main_wordAlignmentTest(); return 0;
