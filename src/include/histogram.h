@@ -12,6 +12,7 @@
 
 #include <map>
 #include <vector>
+#include <iostream>
 
 class Histogram : public std::vector<double>
 {
