@@ -1,5 +1,9 @@
 ## The hunalign sentence aligner
 
+### Fork information
+
+This fork just adds an include and several definitions to make it compile with Visual Studio 2019. The solution file is also included.
+
 ### Introduction
 
 hunalign aligns bilingual text on the sentence level. Its input is
